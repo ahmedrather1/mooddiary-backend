@@ -10,7 +10,10 @@
     "azure",
     "serverless"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "azure-storage": "^2.10.4",
+    "uuid": "^8.3.2"
+  },
   "devDependencies": {
     "serverless-azure-functions": "^2.0.0"
   }
