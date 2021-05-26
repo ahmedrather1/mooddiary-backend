@@ -1,21 +1,31 @@
 let Entry = require('../models/Entry');
 const EntryService = require('../services/EntryService');
+const EntryValidationService = require('../services/EntryValidationService');
 
 module.exports.addEntry = async function (context, req){
 
     let newEntry = new Entry();
     let es = new EntryService();
     newEntry.setMood(req.body.mood);
-    // convert to datetime object eventually
     newEntry.setDate(req.body.date);
 
-    try{
-        await es.createEntry(newEntry);
-        context.res.send();
-    }catch(e){
-        console.log(JSON.stringify(e));
-        context.res.status(400).send(JSON.stringify(e));
+    let validationService = new EntryValidationService();
+    let error = await validationService.validateAddEntry(newEntry);
+
+    if (error && error.errors.length > 0){
+        console.log(JSON.stringify(error));
+        context.res.status(400).send(JSON.stringify(error));
+    }else{
+        try{
+            await es.createEntry(newEntry);
+            context.res.send();
+        }catch(e){
+            console.log(JSON.stringify(e));
+            context.res.status(400).send(JSON.stringify(e));
+        }
     }
+
+    
 }
 
 module.exports.addQuestionnaire = async function (context, req){

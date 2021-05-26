@@ -24,11 +24,15 @@ provider:
   # os: windows  # windows is default, linux is available
   # prefix: "sample"  # prefix of generated resource name
   # subscriptionId: A356AC8C-E310-44F4-BF85-C7F29044AF99
-  # stage: dev
+  stage: dev
   # type: premium  # premium azure functions
 
   environment: # these will be created as application settings
     VARIABLE_FOO: 'foo'
+    TABLE_STORAGE_ACCOUNT: ''
+    TABLE_STORAGE_ACCESS_KEY: ''
+    TABLE_STORAGE_HOST_ADDR: ''
+    PARTITION_KEY_NAME: ''
 
   # you can define apim configuration here
   # apim:
