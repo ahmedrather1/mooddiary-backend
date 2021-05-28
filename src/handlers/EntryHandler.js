@@ -5,30 +5,34 @@ const EntryValidationService = require('../services/EntryValidationService');
 
 module.exports.addEntry = async function (context, req){
 
-    const newEntry = new Entry();
-    const es = new EntryService();
-    newEntry.setMood(req.body.mood);
-    newEntry.setDate(req.body.date);
-
-    const validationService = new EntryValidationService();
-    const error = await validationService.validateAddEntry(newEntry);
-
-    if (error && error.errors.length > 0){
-        context.res.status(400).send(JSON.stringify(error));
-    }else{
-        try{
-            await es.createEntry(newEntry);
-            context.res.send();
-        }catch(e){
-            if(e.type === 500){
-                context.res.status(500).send(JSON.stringify(e.info));
+    
+        const newEntry = new Entry();
+        const es = new EntryService();
+        newEntry.setMood(req.body.mood);
+        newEntry.setDate(req.body.date);
+    
+        const validationService = new EntryValidationService();
+        const error = await validationService.validateAddEntry(newEntry);
+    
+        if (error && error.length > 0){
+            context.res.status(400).send(JSON.stringify(error));
+        }else{
+            try{
+                await es.createEntry(newEntry);
+                context.res.send();
+            }catch(e){
+                if(e.type === 500){
+                    context.res.status(500).send(JSON.stringify(e));
+                }
+                else{
+                    context.res.status(400).send(JSON.stringify(e));
+                }
+    
             }
-            else{
-                context.res.status(400).send(JSON.stringify(e.info));
-            }
-
         }
-    }
+
+
+
 
     
 }

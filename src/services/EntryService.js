@@ -1,7 +1,7 @@
 'use strict';
-// const Entry = require('../models/Entry');
 const azure = require('azure-storage');
 const { v4: uuidv4 } = require('uuid');
+const DiaryError = require('../models/DiaryError');
 
 
 function EntryService() {
@@ -46,12 +46,7 @@ EntryService.prototype.createEntry = async function(entry){
             // nothing, success
         })
         .catch(err => {
-            const errorInfo = {
-                errors:[]
-            };
-            errorInfo.errors.push(err);
-            const errorObj = {type:500, info: errorInfo};
-            throw errorObj;
+            throw new DiaryError(500, 'table', 'server error', err);
         })
 
 

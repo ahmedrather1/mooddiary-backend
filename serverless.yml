@@ -83,6 +83,7 @@ functions:
     handler: src/handlers/EntryHandler.addEntry
     events:
       - http: true
+        route: entries
         methods:
           - POST
         authlevel: anonymous

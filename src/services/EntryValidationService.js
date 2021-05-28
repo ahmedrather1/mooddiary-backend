@@ -1,36 +1,35 @@
 'use strict';
+const DiaryError = require('../models/DiaryError');
+
 function EntryValidationService(){
 
 }
 
 EntryValidationService.prototype.validateAddEntry = async function(entry){
 
-    const error = {
-        errors:[]
-    };
+    const errors = [];
 
     if(entry==null){
-        error.errors.push({'entry':'NULL'});
+        errors.push(new DiaryError(400, 'entry', 'NULL'));
     }else{
+        
         if(entry.getMood() == null){
-            error.errors.push({'mood': 'DOESNOTEXIST'});
+            errors.push(new DiaryError(400, 'mood', 'DOESNOTEXIST'));
+        }else if(isNaN(entry.getMood())){
+            errors.push(new DiaryError(400, 'mood', 'INVALID'));     
         }
-        if(isNaN(entry.getMood())){
-            error.errors.push({'mood': 'INVALID'});
-        }
+
         if(entry.getDate() == null){
-            error.errors.push({'date': 'DOESNOTEXIST'});
+            errors.push(new DiaryError(400, 'date', 'DOESNOTEXIST'));     
+        }else if(isNaN(Date.parse(entry.getDate()))){
+            errors.push(new DiaryError(400, 'date', 'INVALID'));     
         }
-        if(isNaN(Date.parse(entry.getDate()))){
-            error.errors.push({'date':'INVALID'});
-        }
+        
     }
 
-    return error;
+    return errors;
 
 
 }
-
-
 
 module.exports = EntryValidationService;
