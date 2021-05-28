@@ -23,6 +23,9 @@ module.exports.addEntry = async function (context, req){
             if(e.type === 500){
                 context.res.status(500).send(JSON.stringify(e.info));
             }
+            else{
+                context.res.status(400).send(JSON.stringify(e.info));
+            }
 
         }
     }

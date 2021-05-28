@@ -109,5 +109,8 @@ dist
 # functions
 addEntry/
 
-#local settings
+# local settings
 local.settings.json
+
+# other
+temp/
