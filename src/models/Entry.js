@@ -1,3 +1,4 @@
+'use strict';
 function Entry(){
     this.id = null;
     this.userID = null;
