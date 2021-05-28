@@ -111,6 +111,3 @@ addEntry/
 
 #local settings
 local.settings.json
-
-# other stuff
-temp/
