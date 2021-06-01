@@ -1,6 +1,6 @@
 'use strict';
 function DiaryErrorObject(errCode, errItem = null, errList = []){
-    this.erorrCode = errCode;
+    this.errorCode = errCode;
     this.errorList = [];
     if(errList){
         this.errorList = errList;

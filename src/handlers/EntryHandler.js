@@ -5,7 +5,6 @@ const EntryValidationService = require('../services/EntryValidationService');
 
 module.exports.addEntry = async function (context, req){
 
-    
     const newEntry = new Entry();
     const es = new EntryService();
     newEntry.setMood(req.body.mood);
@@ -15,7 +14,7 @@ module.exports.addEntry = async function (context, req){
     const error = await validationService.validateAddEntry(newEntry);
 
     if (error){
-        context.res.status(error.erorrCode).send(JSON.stringify(error.errorList));
+        context.res.status(error.errorCode).send(JSON.stringify(error.errorList));
         return;
     }
     
@@ -23,8 +22,28 @@ module.exports.addEntry = async function (context, req){
         await es.createEntry(newEntry);
         context.res.send();
     }catch(e){
-        context.res.status(e.erorrCode).send(JSON.stringify(e.errorList));
+        context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
     }
+
+}
+
+module.exports.getEntries = async function (context, req){
+    const es = new EntryService;
+    const validationService = new EntryValidationService();
+    let offsetVal = req.params.offset? req.params.offset: null;
+    let limitVal = req.params.limit? req.params.limit: null;
+
+    // does corresponding service method name have to be different than handler name
+    const entries = await es.getEntriesData();
+    const error = await validationService.validateGetEntries(entries, offsetVal, limitVal);
+
+    if (error){
+        context.res.status(error.errorCode).send(JSON.stringify(error.errorList));
+        return;
+    }else{
+        context.res.send(JSON.stringify({DiaryEntries:entries, offset: offsetVal, limit:limitVal}));
+    }
+
 
 }
 
