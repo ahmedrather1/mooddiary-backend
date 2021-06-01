@@ -21,9 +21,9 @@ EntryValidationService.prototype.validateAddEntry = async function(entry){
         }
 
         if(entry.getDate() == null){
-            errors.push(new DiaryErrorItem(400, 'date', 'DOESNOTEXIST'));     
+            errors.push(new DiaryErrorItem('date', 'DOESNOTEXIST'));     
         }else if(isNaN(Date.parse(entry.getDate()))){
-            errors.push(new DiaryErrorItem(400, 'date', 'INVALID'));     
+            errors.push(new DiaryErrorItem('date', 'INVALID'));     
         }
         
     }
