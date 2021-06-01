@@ -1,11 +1,5 @@
 'use strict';
-function DiaryErrorItem(type, affectedComponent, problem, info){
-    if (type !== undefined){
-        this.type = type;
-    }else{
-        this.type = null;
-    }
-
+function DiaryErrorItem(affectedComponent, problem, info){
     if (affectedComponent !== undefined){
         this.affectedComponent = affectedComponent;
     }else{
@@ -23,14 +17,6 @@ function DiaryErrorItem(type, affectedComponent, problem, info){
     }else{
         this.info = null;
     }
-}
-
-DiaryErrorItem.prototype.setType = function(val){
-    this.type = val;
-}
-
-DiaryErrorItem.prototype.getType = function(){
-    return this.type;
 }
 
 DiaryErrorItem.prototype.setAffectedComponent = function(val){

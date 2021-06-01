@@ -8,27 +8,31 @@ function EntryValidationService(){
 
 EntryValidationService.prototype.validateAddEntry = async function(entry){
 
-    const errors = new DiaryErrorObject()
+    const errors = [];
 
     if(entry==null){
-        errors.addErrorItem(new DiaryErrorItem(400, 'entry', 'NULL'));
+        errors.push(new DiaryErrorItem('entry', 'NULL'));
     }else{
         
         if(entry.getMood() == null){
-            errors.addErrorItem(new DiaryErrorItem(400, 'mood', 'DOESNOTEXIST'));
+            errors.push(new DiaryErrorItem('mood', 'DOESNOTEXIST'));
         }else if(isNaN(entry.getMood())){
-            errors.addErrorItem(new DiaryErrorItem(400, 'mood', 'INVALID'));     
+            errors.push(new DiaryErrorItem('mood', 'INVALID'));     
         }
 
         if(entry.getDate() == null){
-            errors.addErrorItem(new DiaryErrorItem(400, 'date', 'DOESNOTEXIST'));     
+            errors.push(new DiaryErrorItem(400, 'date', 'DOESNOTEXIST'));     
         }else if(isNaN(Date.parse(entry.getDate()))){
-            errors.addErrorItem(new DiaryErrorItem(400, 'date', 'INVALID'));     
+            errors.push(new DiaryErrorItem(400, 'date', 'INVALID'));     
         }
         
     }
 
-    return errors;
+    if(errors.length===0){
+        return null;
+    }
+
+    return new DiaryErrorObject(400, null, errors);
 
 
 }

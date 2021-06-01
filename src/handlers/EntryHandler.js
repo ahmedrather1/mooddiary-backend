@@ -6,46 +6,26 @@ const EntryValidationService = require('../services/EntryValidationService');
 module.exports.addEntry = async function (context, req){
 
     
-        const newEntry = new Entry();
-        const es = new EntryService();
-        newEntry.setMood(req.body.mood);
-        newEntry.setDate(req.body.date);
+    const newEntry = new Entry();
+    const es = new EntryService();
+    newEntry.setMood(req.body.mood);
+    newEntry.setDate(req.body.date);
+
+    const validationService = new EntryValidationService();
+    const error = await validationService.validateAddEntry(newEntry);
+
+    if (error){
+        context.res.status(error.erorrCode).send(JSON.stringify(error.errorList));
+        return;
+    }
     
-        const validationService = new EntryValidationService();
-        const error = await validationService.validateAddEntry(newEntry);
-    
-        if (error && error.errorList.length > 0){
-            context.res.status(400).send(JSON.stringify(error));
-        }else{
-            try{
-                await es.createEntry(newEntry);
-                context.res.send();
-            }catch(e){
+    try{
+        await es.createEntry(newEntry);
+        context.res.send();
+    }catch(e){
+        context.res.status(e.erorrCode).send(JSON.stringify(e.errorList));
+    }
 
-                let foundServerError = false;
-                let errorList = e.getErrorList()
-                for (let i = 0; i < errorList.length; i ++){
-                    if (errorList[i].type === 500){
-                        foundServerError = true;
-                    }
-                }
-
-                if(foundServerError === true){
-                    console.log("found server error, so 500");
-                    context.res.status(500).send(JSON.stringify(e));
-                }
-                else{
-                    console.log("did not find server error, so 400");
-                    context.res.status(400).send(JSON.stringify(e));
-                }
-    
-            }
-        }
-
-
-
-
-    
 }
 
 module.exports.addQuestionnaire = async function (context, req){

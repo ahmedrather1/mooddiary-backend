@@ -38,10 +38,7 @@ EntryService.prototype.createEntry = async function(entry){
             // nothing, success
         })
         .catch(err => {
-            let errorObj = new DiaryErrorObject();
-            let errorItem = new DiaryErrorItem(500, 'table', 'server error', err)
-            errorObj.addErrorItem(errorItem);
-            throw errorObj;
+            throw new DiaryErrorObject(500, new DiaryErrorItem('table', 'server error', err) );
         })
 
 

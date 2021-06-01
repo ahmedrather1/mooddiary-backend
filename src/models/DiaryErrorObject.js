@@ -1,6 +1,13 @@
 'use strict';
-function DiaryErrorObject(){
+function DiaryErrorObject(errCode, errItem = null, errList = []){
+    this.erorrCode = errCode;
     this.errorList = [];
+    if(errList){
+        this.errorList = errList;
+    }
+    if(errItem){
+        this.errorList.push(errItem);
+    }
 }
 
 DiaryErrorObject.prototype.addErrorItem = function(val){
