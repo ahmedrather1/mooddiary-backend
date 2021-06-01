@@ -1,7 +1,8 @@
 'use strict';
 const azure = require('azure-storage');
 const { v4: uuidv4 } = require('uuid');
-const DiaryError = require('../models/DiaryError');
+const DiaryErrorItem = require('../models/DiaryErrorItem');
+const DiaryErrorObject = require('../models/DiaryErrorObject');
 
 
 function EntryService() {
@@ -23,15 +24,6 @@ EntryService.prototype.createEntry = async function(entry){
     date: entGen.DateTime(new Date(entry.date)),
     };
 
-    /*
-    console.log("----before insert entity... 0");
-    tableService.insertEntity('DiaryEntrie', diaryEntry, function(error){
-        console.log("inside callback....1");
-    });
-
-    console.log("after insert entity... 2"); */
-
-
     const insertEntityPromise = (...args) => {
         return new Promise((resolve, reject) => {
             tableService.insertEntity(...args, (error, result, response) => {
@@ -46,7 +38,10 @@ EntryService.prototype.createEntry = async function(entry){
             // nothing, success
         })
         .catch(err => {
-            throw new DiaryError(500, 'table', 'server error', err);
+            let errorObj = new DiaryErrorObject();
+            let errorItem = new DiaryErrorItem(500, 'table', 'server error', err)
+            errorObj.addErrorItem(errorItem);
+            throw errorObj;
         })
 
 

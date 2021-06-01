@@ -14,17 +14,28 @@ module.exports.addEntry = async function (context, req){
         const validationService = new EntryValidationService();
         const error = await validationService.validateAddEntry(newEntry);
     
-        if (error && error.length > 0){
+        if (error && error.errorList.length > 0){
             context.res.status(400).send(JSON.stringify(error));
         }else{
             try{
                 await es.createEntry(newEntry);
                 context.res.send();
             }catch(e){
-                if(e.type === 500){
+
+                let foundServerError = false;
+                let errorList = e.getErrorList()
+                for (let i = 0; i < errorList.length; i ++){
+                    if (errorList[i].type === 500){
+                        foundServerError = true;
+                    }
+                }
+
+                if(foundServerError === true){
+                    console.log("found server error, so 500");
                     context.res.status(500).send(JSON.stringify(e));
                 }
                 else{
+                    console.log("did not find server error, so 400");
                     context.res.status(400).send(JSON.stringify(e));
                 }
     

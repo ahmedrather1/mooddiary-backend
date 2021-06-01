@@ -1,5 +1,5 @@
 'use strict';
-function DiaryError(type, affectedComponent, problem, info){
+function DiaryErrorItem(type, affectedComponent, problem, info){
     if (type !== undefined){
         this.type = type;
     }else{
@@ -25,38 +25,38 @@ function DiaryError(type, affectedComponent, problem, info){
     }
 }
 
-DiaryError.prototype.setType = function(val){
+DiaryErrorItem.prototype.setType = function(val){
     this.type = val;
 }
 
-DiaryError.prototype.getType = function(){
+DiaryErrorItem.prototype.getType = function(){
     return this.type;
 }
 
-DiaryError.prototype.setAffectedComponent = function(val){
+DiaryErrorItem.prototype.setAffectedComponent = function(val){
     this.affectedComponent = val;
 }
 
-DiaryError.prototype.getAffectedComponent = function(){
+DiaryErrorItem.prototype.getAffectedComponent = function(){
     return this.affectedComponent;
 }
 
-DiaryError.prototype.setProblem = function(val){
+DiaryErrorItem.prototype.setProblem = function(val){
     this.problem = val;
 }
 
-DiaryError.prototype.getProblem = function(){
+DiaryErrorItem.prototype.getProblem = function(){
     return this.problem;
 }
 
-DiaryError.prototype.setInfo = function(val){
+DiaryErrorItem.prototype.setInfo = function(val){
     this.info = val;
 }
 
-DiaryError.prototype.getInfo = function(){
+DiaryErrorItem.prototype.getInfo = function(){
     return this.info;
 }
 
 
 
-module.exports = DiaryError;
+module.exports = DiaryErrorItem;
