@@ -1,5 +1,7 @@
 'use strict';
+const { reject } = require('async');
 const azure = require('azure-storage');
+//const { resolve } = require('node:path');
 const { v4: uuidv4 } = require('uuid');
 const DiaryErrorItem = require('../models/DiaryErrorItem');
 const DiaryErrorObject = require('../models/DiaryErrorObject');
@@ -27,7 +29,7 @@ EntryService.prototype.createEntry = async function(entry){
     const insertEntityPromise = (...args) => {
         return new Promise((resolve, reject) => {
             tableService.insertEntity(...args, (error, result, response) => {
-            if (error) return reject(error)
+            if (error) return reject(error);
             // You can't send two arguments into resolve
             resolve([result, response])
           })
@@ -42,6 +44,32 @@ EntryService.prototype.createEntry = async function(entry){
         })
 
 
+}
+
+
+EntryService.prototype.getEntriesData = async function(){
+    const tableService = azure.createTableService(process.env.TABLE_STORAGE_ACCOUNT, process.env.TABLE_STORAGE_ACCESS_KEY, process.env.TABLE_STORAGE_HOST_ADDR);
+
+    const getEntriesPromise = (...args) => {
+        return new Promise((resolve, reject) => {
+            tableService.queryEntities(...args, (error, result) => {
+                if (error) return reject(error);
+                resolve(result)
+            })
+        })
+    }
+    let entities;
+
+    await getEntriesPromise('DiaryEntries', null, null)
+        .then((result) => {
+            entities = result.entries;
+        })
+        .catch(err => {
+            throw new DiaryErrorObject(500, new DiaryErrorItem('table', 'server error', err) );
+        })
+
+    return entities;
+    
 }
 
 /*

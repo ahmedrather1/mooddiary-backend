@@ -33,17 +33,37 @@ module.exports.getEntries = async function (context, req){
     let offsetVal = req.params.offset? req.params.offset: null;
     let limitVal = req.params.limit? req.params.limit: null;
 
+
     // does corresponding service method name have to be different than handler name
-    const entries = await es.getEntriesData();
+    let entries;
+    try{
+        entries = await es.getEntriesData();
+    }catch(e){
+        context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
+    }
+    
+
     const error = await validationService.validateGetEntries(entries, offsetVal, limitVal);
 
     if (error){
         context.res.status(error.errorCode).send(JSON.stringify(error.errorList));
         return;
     }else{
-        context.res.send(JSON.stringify({DiaryEntries:entries, offset: offsetVal, limit:limitVal}));
+        let loopvar;
+        if(limitVal > entries.length - offsetVal){
+            loopvar = entries.length;
+        }else{
+            loopvar = limitVal;
+        }
+
+        let croppedEntries = [];
+        for(let i = 0; i <loopvar; i++){
+            croppedEntries.push(entries[parseInt(offsetVal) + i]);
+        } 
+        context.res.send(JSON.stringify({DiaryEntries:croppedEntries, offset: offsetVal, limit:limitVal}));
     }
 
+    
 
 }
 
