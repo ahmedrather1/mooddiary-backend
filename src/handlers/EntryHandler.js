@@ -1,4 +1,6 @@
 'use strict';
+const DiaryErrorItem = require('../models/DiaryErrorItem');
+const DiaryErrorObject = require('../models/DiaryErrorObject');
 const Entry = require('../models/Entry');
 const EntryService = require('../services/EntryService');
 const EntryValidationService = require('../services/EntryValidationService');
@@ -56,6 +58,20 @@ module.exports.getEntries = async function (context, req){
     }
     
 }
+
+module.exports.getEntry = async function(context, req){
+    const es = new EntryService;
+
+    try{
+        let entry = await es.getEntryData(req.params.id);
+        context.res.send(JSON.stringify(entry));
+    }catch(e){
+        context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
+        return;
+    }
+
+}
+
 
 module.exports.addQuestionnaire = async function (context, req){
 

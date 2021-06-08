@@ -87,6 +87,37 @@ EntryService.prototype.getEntriesData = async function(fromDate, toDate, limitVa
     
 }
 
+EntryService.prototype.getEntryData = async function (id){
+    const tableService = azure.createTableService(process.env.TABLE_STORAGE_ACCOUNT, process.env.TABLE_STORAGE_ACCESS_KEY, process.env.TABLE_STORAGE_HOST_ADDR);
+
+    const getEntryPromise = (...args) => {
+        return new Promise((resolve, reject) => {
+            tableService.retrieveEntity(...args, (error, serverEntity) => {
+                if (error) return reject(error);
+                resolve(serverEntity)
+            })
+        })
+    }
+
+    let entry;
+    await getEntryPromise('DiaryEntries', process.env.PARTITION_KEY_NAME, id)
+        .then((serverEntity) => {
+            entry = serverEntity;
+        })
+        .catch(err => {
+            // this is the only possible error that can be caused by the user who has provided an ID, otherwise everything else is a server error
+            if (err.code === 'ResourceNotFound'){
+                throw new DiaryErrorObject(404, new DiaryErrorItem('ENTITY', 'NOT FOUND', err) );
+            }else{
+                throw new DiaryErrorObject(500, new DiaryErrorItem('table', 'server error', err) );
+            }
+        })
+
+        let entryList = [entry];
+        return cleanEntries(entryList)[0];
+
+}
+
 function cleanEntries(entries){
 
     return entries.map( x => {
