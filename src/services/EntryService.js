@@ -50,14 +50,8 @@ EntryService.prototype.createEntry = async function(entry){
 EntryService.prototype.getEntriesData = async function(fromDate, toDate, limitVal){
     const tableService = azure.createTableService(process.env.TABLE_STORAGE_ACCOUNT, process.env.TABLE_STORAGE_ACCESS_KEY, process.env.TABLE_STORAGE_HOST_ADDR);
     
-    let query;
-    if (fromDate === null){
-        query = new azure.TableQuery()
-        .where('date <= ?', toDate);
-    }else{
-        query = new azure.TableQuery()
+    let query =  new azure.TableQuery()
         .where('date <= ? and date >= ?', toDate, fromDate);
-    }
 
     const getEntriesPromise = (...args) => {
         return new Promise((resolve, reject) => {

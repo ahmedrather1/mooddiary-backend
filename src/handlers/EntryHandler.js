@@ -29,8 +29,21 @@ module.exports.addEntry = async function (context, req){
 
 module.exports.getEntries = async function (context, req){
     const es = new EntryService;
-    const fromDate = req.query.createdFrom && !isNaN(Date.parse(req.query.createdFrom))? req.query.createdFrom: null;
-    const toDate = req.query.createdTo && !isNaN(Date.parse(req.query.createdTo))? req.query.createdTo: Date.now;
+
+    let fromDate = new Date();
+    if (req.query.createdFrom && !isNaN(Date.parse(req.query.createdFrom))){
+        fromDate = req.query.createdFrom;
+    }else{
+        fromDate.setDate(fromDate.getDate() - 7);
+    }
+
+    let toDate = new Date();
+    if (req.query.createdTo && !isNaN(Date.parse(req.query.createdTo))){
+        toDate = req.query.createdTo;
+    }else{
+        toDate.setDate(toDate.getDate() +1 );
+    }
+
     const limitVal = req.query.limit && !isNaN(req.query.limit) && req.query.limit>0  ? req.query.limit: process.env.DEFAULT_GETENTRIES_LIMIT;
 
     try{
