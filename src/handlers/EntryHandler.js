@@ -5,7 +5,6 @@ const EntryValidationService = require('../services/EntryValidationService');
 
 module.exports.addEntry = async function (context, req){
 
-    
     const newEntry = new Entry();
     const es = new EntryService();
     newEntry.setMood(req.body.mood);
@@ -15,7 +14,7 @@ module.exports.addEntry = async function (context, req){
     const error = await validationService.validateAddEntry(newEntry);
 
     if (error){
-        context.res.status(error.erorrCode).send(JSON.stringify(error.errorList));
+        context.res.status(error.errorCode).send(JSON.stringify(error.errorList));
         return;
     }
     
@@ -23,9 +22,39 @@ module.exports.addEntry = async function (context, req){
         await es.createEntry(newEntry);
         context.res.send();
     }catch(e){
-        context.res.status(e.erorrCode).send(JSON.stringify(e.errorList));
+        context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
     }
 
+}
+
+module.exports.getEntries = async function (context, req){
+    const es = new EntryService;
+
+    let fromDate = new Date();
+    if (req.query.createdFrom && !isNaN(Date.parse(req.query.createdFrom))){
+        fromDate = req.query.createdFrom;
+    }else{
+        fromDate.setDate(fromDate.getDate() - 7);
+    }
+
+    let toDate = new Date();
+    if (req.query.createdTo && !isNaN(Date.parse(req.query.createdTo))){
+        toDate = req.query.createdTo;
+    }else{
+        toDate.setDate(toDate.getDate() +1 );
+    }
+
+    const limitVal = req.query.limit && !isNaN(req.query.limit) && req.query.limit>0  ? req.query.limit: process.env.DEFAULT_GETENTRIES_LIMIT;
+
+    try{
+        let entries;
+        entries = await es.getEntriesData(fromDate, toDate, limitVal);
+        context.res.send(JSON.stringify({DiaryEntries: entries, fromDate: fromDate, toDate: toDate, limit: limitVal}));
+    }catch(e){
+        context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
+        return;
+    }
+    
 }
 
 module.exports.addQuestionnaire = async function (context, req){

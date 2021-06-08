@@ -37,4 +37,5 @@ EntryValidationService.prototype.validateAddEntry = async function(entry){
 
 }
 
+
 module.exports = EntryValidationService;
