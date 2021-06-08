@@ -29,42 +29,19 @@ module.exports.addEntry = async function (context, req){
 
 module.exports.getEntries = async function (context, req){
     const es = new EntryService;
-    const validationService = new EntryValidationService();
-    let offsetVal = req.params.offset? req.params.offset: null;
-    let limitVal = req.params.limit? req.params.limit: null;
+    const fromDate = req.query.createdFrom && !isNaN(Date.parse(req.query.createdFrom))? req.query.createdFrom: null;
+    const toDate = req.query.createdTo && !isNaN(Date.parse(req.query.createdTo))? req.query.createdTo: Date.now;
+    const limitVal = req.query.limit && !isNaN(req.query.limit) && req.query.limit>0  ? req.query.limit: process.env.DEFAULT_GETENTRIES_LIMIT;
 
-
-    // does corresponding service method name have to be different than handler name
-    let entries;
     try{
-        entries = await es.getEntriesData();
+        let entries;
+        entries = await es.getEntriesData(fromDate, toDate, limitVal);
+        context.res.send(JSON.stringify({DiaryEntries: entries, fromDate: fromDate, toDate: toDate, limit: limitVal}));
     }catch(e){
         context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
-    }
-    
-
-    const error = await validationService.validateGetEntries(entries, offsetVal, limitVal);
-
-    if (error){
-        context.res.status(error.errorCode).send(JSON.stringify(error.errorList));
         return;
-    }else{
-        let loopvar;
-        if(limitVal > entries.length - offsetVal){
-            loopvar = entries.length;
-        }else{
-            loopvar = limitVal;
-        }
-
-        let croppedEntries = [];
-        for(let i = 0; i <loopvar; i++){
-            croppedEntries.push(entries[parseInt(offsetVal) + i]);
-        } 
-        context.res.send(JSON.stringify({DiaryEntries:croppedEntries, offset: offsetVal, limit:limitVal}));
     }
-
     
-
 }
 
 module.exports.addQuestionnaire = async function (context, req){

@@ -7,6 +7,7 @@
         "TABLE_STORAGE_ACCOUNT": "<table storage account name>",
         "TABLE_STORAGE_ACCESS_KEY": "<table storage access key>",
         "TABLE_STORAGE_HOST_ADDR": "<table storage host address>",
-        "PARTITION_KEY_NAME": "entries"
+        "PARTITION_KEY_NAME": "entries",
+        "DEFAULT_GETENTRIES_LIMIT": "<default limit for getEntries, should be an int>"
     }
 }

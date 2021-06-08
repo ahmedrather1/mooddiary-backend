@@ -1,7 +1,7 @@
 'use strict';
 const { reject } = require('async');
 const azure = require('azure-storage');
-//const { resolve } = require('node:path');
+// const { resolve } = require('node:path');
 const { v4: uuidv4 } = require('uuid');
 const DiaryErrorItem = require('../models/DiaryErrorItem');
 const DiaryErrorObject = require('../models/DiaryErrorObject');
@@ -47,8 +47,17 @@ EntryService.prototype.createEntry = async function(entry){
 }
 
 
-EntryService.prototype.getEntriesData = async function(){
+EntryService.prototype.getEntriesData = async function(fromDate, toDate, limitVal){
     const tableService = azure.createTableService(process.env.TABLE_STORAGE_ACCOUNT, process.env.TABLE_STORAGE_ACCESS_KEY, process.env.TABLE_STORAGE_HOST_ADDR);
+    
+    let query;
+    if (fromDate === null){
+        query = new azure.TableQuery()
+        .where('date <= ?', toDate);
+    }else{
+        query = new azure.TableQuery()
+        .where('date <= ? and date >= ?', toDate, fromDate);
+    }
 
     const getEntriesPromise = (...args) => {
         return new Promise((resolve, reject) => {
@@ -60,16 +69,40 @@ EntryService.prototype.getEntriesData = async function(){
     }
     let entities;
 
-    await getEntriesPromise('DiaryEntries', null, null)
+
+    await getEntriesPromise('DiaryEntries', query, null)
         .then((result) => {
             entities = result.entries;
+            entities.sort((a, b) =>{
+                const keyA = a.date._;
+                const keyB = b.date._;
+                if (keyA < keyB) return -1;
+                if (keyA > keyB) return 1;
+                return 0;
+            })
+            
+            if (limitVal < entities.length){
+                entities = entities.slice(0, limitVal);
+            }
         })
         .catch(err => {
             throw new DiaryErrorObject(500, new DiaryErrorItem('table', 'server error', err) );
         })
 
-    return entities;
+       return cleanEntries(entities);    
     
+}
+
+function cleanEntries(entries){
+
+    return entries.map( x => {
+        return {
+            ID: x.RowKey._,
+            date: x.date._,
+            mood: x.mood._
+        }
+    });
+
 }
 
 /*

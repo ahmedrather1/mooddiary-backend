@@ -92,7 +92,7 @@ functions:
     handler: src/handlers/EntryHandler.getEntries
     events:
       - http: true
-        route: entries/{offset}/{limit}
+        route: entries
         methods:
           - GET
         authlevel: anonymous

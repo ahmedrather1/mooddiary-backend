@@ -37,31 +37,5 @@ EntryValidationService.prototype.validateAddEntry = async function(entry){
 
 }
 
-EntryValidationService.prototype.validateGetEntries = async function(entries, offsetVal, limitVal){
-    console.log("length of list: " + entries.length);
-
-    const errors = [];
-
-    if(isNaN(offsetVal)){
-        errors.push(new DiaryErrorItem('offset', 'INVALID'));
-    }else if (offsetVal < 0){
-        errors.push(new DiaryErrorItem('offset', 'NEGATIVE'));
-    }else if (offsetVal >= entries.length){
-        errors.push(new DiaryErrorItem('offset', 'TOO LARGE'));
-    }
-
-    if(isNaN(limitVal || limitVal < 0)){
-        errors.push(new DiaryErrorItem('limit', 'INVALID'));
-    }else if (limitVal <0){
-        errors.push(new DiaryErrorItem('limit', 'NEGATIVE'));
-    }
-
-    if(errors.length===0){
-        return null;
-    }
-
-    return new DiaryErrorObject(400, null, errors);
-    
-}
 
 module.exports = EntryValidationService;

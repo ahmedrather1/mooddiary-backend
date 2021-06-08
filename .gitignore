@@ -108,6 +108,7 @@ dist
 
 # functions
 addEntry/
+getEntries/
 
 # local settings
 local.settings.json
