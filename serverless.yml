@@ -97,6 +97,16 @@ functions:
           - GET
         authlevel: anonymous
 
+  getEntry:
+  handler: src/handlers/EntryHandler.getEntry
+  events:
+    - http: true
+      route: entries/{id}
+      methods:
+        - GET
+      authlevel: anonymous
+
+
 
   # The following are a few examples of other events you can configure:
   # storageBlob:

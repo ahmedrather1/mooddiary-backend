@@ -11,8 +11,8 @@ This project requires Azure TableStorage. To use TableStorage, you must install 
 #### Request:
 ```json
 {
-    "mood": '29'
-    "date": '01/12/2000'
+    "mood": "29"
+    "date": "01/12/2000"
 }
 ```
 
@@ -24,7 +24,7 @@ This project requires Azure TableStorage. To use TableStorage, you must install 
 ```json
 {
     "errors": [
-        {"FIELD","error"},...
+        {"FIELD","error"},
     ]
 }
 ```
@@ -39,18 +39,17 @@ This project requires Azure TableStorage. To use TableStorage, you must install 
 
 ```json
 {
-    'entries': 
+    "entries": 
         [
         {
-            'id','222',
-            'date': '2021-05-19T00:00:00Z'
-            'mood: '29'
+            "id": "222",
+            "date": "2021-05-19T00:00:00Z"
+            "mood": "29"
         }, 
         {
-            'id','223',
-            'date': '2021-05-21T23:59:59Z'
-            'mood: '31'
-
+            "id":"223",
+            "date": "2021-05-21T23:59:59Z"
+            "mood": "31"
         }]
 
     "fromDate" : "2021-05-18T00:00:00Z",
@@ -66,9 +65,9 @@ This project requires Azure TableStorage. To use TableStorage, you must install 
 200 -- everything ok 
 ```json
 {
-    'id','222',
-    'mood': '29'
-    'freewrite: 'blahblahblah'
+    "id":"222",
+    "mood": "29"
+    "freewrite: 'blahblahblah"
 }
 ```
 
@@ -77,7 +76,7 @@ This project requires Azure TableStorage. To use TableStorage, you must install 
 #### Request:
 ```json
 {
-    "mood": '29',
+    "mood": "29",
     "freewrite":"xyz"
 }
 ```
