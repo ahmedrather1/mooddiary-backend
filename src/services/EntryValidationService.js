@@ -37,5 +37,24 @@ EntryValidationService.prototype.validateAddEntry = async function(entry){
 
 }
 
+EntryValidationService.prototype.validateUpdateEntry = async function(updateObj){
+
+    const errors = [];
+
+    // should be similar validation for prompts, etc
+    if (updateObj.mood){
+        if (updateObj.mood < 0){
+            errors.push(new DiaryErrorItem('mood', 'INVALID'))
+        }
+    }
+
+    if(errors.length===0){
+        return null;
+    }
+
+    return new DiaryErrorObject(400, null, errors);
+
+}
+
 
 module.exports = EntryValidationService;

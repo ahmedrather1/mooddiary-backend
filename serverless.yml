@@ -98,13 +98,23 @@ functions:
         authlevel: anonymous
 
   getEntry:
-  handler: src/handlers/EntryHandler.getEntry
-  events:
-    - http: true
-      route: entries/{id}
-      methods:
-        - GET
-      authlevel: anonymous
+    handler: src/handlers/EntryHandler.getEntry
+    events:
+      - http: true
+        route: entries/{id}
+        methods:
+          - GET
+        authlevel: anonymous
+
+  updateEntry:
+    handler: src/handlers/EntryHandler.updateEntry
+    events:
+      - http: true
+        route: entries/{id}
+        methods:
+          - PUT
+        authlevel: anonymous
+
 
 
 
