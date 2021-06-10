@@ -115,6 +115,15 @@ functions:
           - PUT
         authlevel: anonymous
 
+  deleteEntry:
+    handler: src/handlers/EntryHandler.deleteEntry
+    events:
+      - http: true
+        route: entries/{id}
+        methods:
+          - DELETE
+        authlevel: anonymous
+
 
 
 

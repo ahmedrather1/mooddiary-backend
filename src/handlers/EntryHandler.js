@@ -109,6 +109,22 @@ module.exports.updateEntry = async function(context, req){
 
 }
 
+module.exports.deleteEntry = async function (context, req){
+    const es = new EntryService;
+    const id = req.params.id;
+
+    try{
+        console.log("got here 1 with id:" + id);
+        await es.deleteEntry(id);
+        context.res.send();
+    }catch(e){
+        context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
+        return;
+    }
+
+
+}
+
 module.exports.addQuestionnaire = async function (context, req){
 
     // should be a dictionary of {question: answer} 

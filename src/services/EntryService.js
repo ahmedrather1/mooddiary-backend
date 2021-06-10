@@ -161,7 +161,39 @@ EntryService.prototype.updateEntryData = async function (toUpdate, id){
         }
     })
 
+}
 
+EntryService.prototype.deleteEntry = async function(id){
+    const tableService = azure.createTableService(process.env.TABLE_STORAGE_ACCOUNT, process.env.TABLE_STORAGE_ACCESS_KEY, process.env.TABLE_STORAGE_HOST_ADDR);
+    const entGen = azure.TableUtilities.entityGenerator;
+    
+    console.log("got here 2 with id:" + id);
+
+    let toDelete = {
+        PartitionKey: entGen.String(process.env.PARTITION_KEY_NAME),
+        RowKey: entGen.String(id),
+    };
+    console.log("got here 2 2");
+    const deleteEntryPromise = (...args) => {
+        return new Promise((resolve, reject) => {
+            tableService.deleteEntity(...args, (error, response) => {
+                if (error) return reject(error);
+                resolve(response)
+            })
+        })
+    }
+    console.log("got here 3");
+    await deleteEntryPromise('DiaryEntries', toDelete)
+    .then((response) => {
+        // nothing
+    })
+    .catch(err => {
+        if (err.code === 'ResourceNotFound'){
+            throw new DiaryErrorObject(404, new DiaryErrorItem('ENTITY', 'NOT FOUND', err) );
+        }else{
+            throw new DiaryErrorObject(500, new DiaryErrorItem('table', 'server error', err) );
+        }
+    })
 
 
 }
