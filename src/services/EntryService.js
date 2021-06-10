@@ -118,6 +118,54 @@ EntryService.prototype.getEntryData = async function (id){
 
 }
 
+EntryService.prototype.updateEntryData = async function (toUpdate, id){
+    const tableService = azure.createTableService(process.env.TABLE_STORAGE_ACCOUNT, process.env.TABLE_STORAGE_ACCESS_KEY, process.env.TABLE_STORAGE_HOST_ADDR);
+    const entGen = azure.TableUtilities.entityGenerator;
+
+
+    let updatedEntry = {
+        PartitionKey: entGen.String(process.env.PARTITION_KEY_NAME),
+        RowKey: entGen.String(id),
+    };
+
+
+    // this should be done for freewrite prompts etc in the way it is done for hello below
+    if (toUpdate.mood){
+        updatedEntry.mood = entGen.String(toUpdate.mood);
+    }
+
+    if (toUpdate.hello){
+        updatedEntry.hello = entGen.String(toUpdate.hello);
+    }
+
+
+
+    const updateEntryPromise = (...args) => {
+        return new Promise((resolve, reject) => {
+            tableService.mergeEntity(...args, (error, result, response) => {
+                if (error) return reject(error);
+                resolve(result)
+            })
+        })
+    }
+
+    await updateEntryPromise('DiaryEntries', updatedEntry)
+    .then((result) => {
+        // nothing, success
+    })
+    .catch(err => {
+        if (err.code === 'ResourceNotFound'){
+            throw new DiaryErrorObject(404, new DiaryErrorItem('ENTITY', 'NOT FOUND', err) );
+        }else{
+            throw new DiaryErrorObject(500, new DiaryErrorItem('table', 'server error', err) );
+        }
+    })
+
+
+
+
+}
+
 function cleanEntries(entries){
 
     return entries.map( x => {

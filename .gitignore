@@ -110,6 +110,7 @@ dist
 addEntry/
 getEntries/
 getEntry/
+updateEntry/
 
 # local settings
 local.settings.json

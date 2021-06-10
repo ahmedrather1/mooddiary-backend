@@ -72,6 +72,42 @@ module.exports.getEntry = async function(context, req){
 
 }
 
+module.exports.updateEntry = async function(context, req){
+    const es = new EntryService;
+    const evs = new EntryValidationService;
+
+    let toUpdate = {};
+
+    // more of these checks required to build toUpdate object for prompts and freewrite
+    // 
+    if (req.body.mood){
+        toUpdate.mood = req.body.mood;
+    }
+
+    if (req.body.hello){
+        toUpdate.hello = req.body.hello;
+    }
+
+    let error = await evs.validateUpdateEntry(toUpdate);
+
+
+    if (error){
+        context.res.status(error.errorCode).send(JSON.stringify(error.errorList));
+        return;
+    }
+
+
+    try{
+        await es.updateEntryData(toUpdate, req.params.id);
+        context.res.send();
+    }catch(e){
+        context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
+        return;
+    }
+    
+
+
+}
 
 module.exports.addQuestionnaire = async function (context, req){
 
