@@ -1,6 +1,6 @@
 'use strict';
-const DiaryErrorItem = require('../models/DiaryErrorItem');
-const DiaryErrorObject = require('../models/DiaryErrorObject');
+// const DiaryErrorItem = require('../models/DiaryErrorItem');
+// const DiaryErrorObject = require('../models/DiaryErrorObject');
 const Entry = require('../models/Entry');
 const EntryService = require('../services/EntryService');
 const EntryValidationService = require('../services/EntryValidationService');
@@ -63,7 +63,7 @@ module.exports.getEntry = async function(context, req){
     const es = new EntryService;
 
     try{
-        let entry = await es.getEntryData(req.params.id);
+        const entry = await es.getEntryData(req.params.id);
         context.res.send(JSON.stringify(entry));
     }catch(e){
         context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
@@ -76,7 +76,7 @@ module.exports.updateEntry = async function(context, req){
     const es = new EntryService;
     const evs = new EntryValidationService;
 
-    let toUpdate = {};
+    const toUpdate = {};
 
     // more of these checks required to build toUpdate object for prompts and freewrite
     // 
@@ -88,7 +88,7 @@ module.exports.updateEntry = async function(context, req){
         toUpdate.hello = req.body.hello;
     }
 
-    let error = await evs.validateUpdateEntry(toUpdate);
+    const error = await evs.validateUpdateEntry(toUpdate);
 
 
     if (error){
@@ -114,7 +114,6 @@ module.exports.deleteEntry = async function (context, req){
     const id = req.params.id;
 
     try{
-        console.log("got here 1 with id:" + id);
         await es.deleteEntry(id);
         context.res.send();
     }catch(e){

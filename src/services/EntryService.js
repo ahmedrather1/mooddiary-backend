@@ -50,7 +50,7 @@ EntryService.prototype.createEntry = async function(entry){
 EntryService.prototype.getEntriesData = async function(fromDate, toDate, limitVal){
     const tableService = azure.createTableService(process.env.TABLE_STORAGE_ACCOUNT, process.env.TABLE_STORAGE_ACCESS_KEY, process.env.TABLE_STORAGE_HOST_ADDR);
     
-    let query =  new azure.TableQuery()
+    const query =  new azure.TableQuery()
         .where('date <= ? and date >= ?', toDate, fromDate);
 
     const getEntriesPromise = (...args) => {
@@ -113,7 +113,7 @@ EntryService.prototype.getEntryData = async function (id){
             }
         })
 
-        let entryList = [entry];
+        const entryList = [entry];
         return cleanEntries(entryList)[0];
 
 }
@@ -123,7 +123,7 @@ EntryService.prototype.updateEntryData = async function (toUpdate, id){
     const entGen = azure.TableUtilities.entityGenerator;
 
 
-    let updatedEntry = {
+    const updatedEntry = {
         PartitionKey: entGen.String(process.env.PARTITION_KEY_NAME),
         RowKey: entGen.String(id),
     };
@@ -166,14 +166,11 @@ EntryService.prototype.updateEntryData = async function (toUpdate, id){
 EntryService.prototype.deleteEntry = async function(id){
     const tableService = azure.createTableService(process.env.TABLE_STORAGE_ACCOUNT, process.env.TABLE_STORAGE_ACCESS_KEY, process.env.TABLE_STORAGE_HOST_ADDR);
     const entGen = azure.TableUtilities.entityGenerator;
-    
-    console.log("got here 2 with id:" + id);
 
-    let toDelete = {
+    const toDelete = {
         PartitionKey: entGen.String(process.env.PARTITION_KEY_NAME),
         RowKey: entGen.String(id),
     };
-    console.log("got here 2 2");
     const deleteEntryPromise = (...args) => {
         return new Promise((resolve, reject) => {
             tableService.deleteEntity(...args, (error, response) => {
@@ -182,7 +179,6 @@ EntryService.prototype.deleteEntry = async function(id){
             })
         })
     }
-    console.log("got here 3");
     await deleteEntryPromise('DiaryEntries', toDelete)
     .then((response) => {
         // nothing
