@@ -15,7 +15,7 @@ service: mooddiary-app
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
-frameworkVersion: '2'
+frameworkVersion: "2"
 
 provider:
   name: azure
@@ -28,40 +28,40 @@ provider:
   # type: premium  # premium azure functions
 
   environment: # these will be created as application settings
-    VARIABLE_FOO: 'foo'
-    TABLE_STORAGE_ACCOUNT: ''
-    TABLE_STORAGE_ACCESS_KEY: ''
-    TABLE_STORAGE_HOST_ADDR: ''
-    PARTITION_KEY_NAME: ''
+    VARIABLE_FOO: "foo"
+    TABLE_STORAGE_ACCOUNT: ""
+    TABLE_STORAGE_ACCESS_KEY: ""
+    TABLE_STORAGE_HOST_ADDR: ""
+    PARTITION_KEY_NAME: ""
 
   # you can define apim configuration here
-  # apim:
-  #   apis:
-  #     - name: v1
-  #       subscriptionRequired: false # if true must provide an api key
-  #       displayName: v1
+  #apim:
+  #  apis:
+  #    - name: v1
+  #      subscriptionRequired: false # if true must provide an api key
+  #      displayName: v1
   #       description: V1 sample app APIs
-  #       protocols:
-  #         - https
+  #      protocols:
+  #        - http
   #       path: v1
   #       tags:
   #         - tag1
   #         - tag2
   #       authorization: none
-  #   cors:
-  #     allowCredentials: false
-  #     allowedOrigins:
-  #       - "*"
-  #     allowedMethods:
-  #       - GET
-  #       - POST
-  #       - PUT
-  #       - DELETE
-  #       - PATCH
-  #     allowedHeaders:
-  #       - "*"
-  #     exposeHeaders:
-  #       - "*"
+  #  cors:
+  #    allowCredentials: true
+  #    allowedOrigins:
+  #      - "*"
+  #    allowedMethods:
+  #      - GET
+  #      - POST
+  #      - PUT
+  #      - DELETE
+  #      - PATCH
+  #    allowedHeaders:
+  #      - "*"
+  #    exposeHeaders:
+  #      - "*"
 
 plugins: # look for additional plugins in the community plugins repo: https://github.com/serverless/plugins
   - serverless-azure-functions
@@ -78,7 +78,6 @@ package:
     - .vscode/**
 
 functions:
-
   addEntry:
     handler: src/handlers/EntryHandler.addEntry
     events:
@@ -86,8 +85,10 @@ functions:
         route: entries
         methods:
           - POST
+          #- OPTIONS
         authlevel: anonymous
-  
+        cors: true
+
   getEntries:
     handler: src/handlers/EntryHandler.getEntries
     events:
@@ -96,6 +97,7 @@ functions:
         methods:
           - GET
         authlevel: anonymous
+        cors: true
 
   getEntry:
     handler: src/handlers/EntryHandler.getEntry
@@ -105,6 +107,7 @@ functions:
         methods:
           - GET
         authlevel: anonymous
+        cors: true
 
   updateEntry:
     handler: src/handlers/EntryHandler.updateEntry
@@ -114,6 +117,7 @@ functions:
         methods:
           - PUT
         authlevel: anonymous
+        cors: true
 
   deleteEntry:
     handler: src/handlers/EntryHandler.deleteEntry
@@ -123,9 +127,7 @@ functions:
         methods:
           - DELETE
         authlevel: anonymous
-
-
-
+        cors: true
 
   # The following are a few examples of other events you can configure:
   # storageBlob:

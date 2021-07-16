@@ -23,6 +23,7 @@
   "dependencies": {
     "async": "^3.2.0",
     "azure-storage": "^2.10.4",
+    "cors": "^2.8.5",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "eslint-plugin-import": "^2.23.3",
     "git-list-updated": "^1.2.1",
     "prettier": "^2.3.0",
-    "serverless-azure-functions": "^2.0.0"
+    "serverless-azure-functions": "^2.0.0",
+    "serverless-offline": "^7.0.0"
   }
 }
