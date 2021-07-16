@@ -26,6 +26,8 @@ EntryService.prototype.createEntry = async function (entry) {
     date: entGen.DateTime(new Date(entry.date)),
   };
 
+  let success = false;
+
   const insertEntityPromise = (...args) => {
     return new Promise((resolve, reject) => {
       tableService.insertEntity(...args, (error, result, response) => {
@@ -37,8 +39,7 @@ EntryService.prototype.createEntry = async function (entry) {
   };
   await insertEntityPromise("DiaryEntries", diaryEntry)
     .then(([result, response]) => {
-      // new code from jul 16
-      return { entryId: rowKeyName };
+      success = true;
     })
     .catch((err) => {
       throw new DiaryErrorObject(
@@ -46,6 +47,10 @@ EntryService.prototype.createEntry = async function (entry) {
         new DiaryErrorItem("table", "server error", err)
       );
     });
+
+  if (success === true) {
+    return { id: rowKeyName };
+  }
 };
 
 EntryService.prototype.getEntriesData = async function (
