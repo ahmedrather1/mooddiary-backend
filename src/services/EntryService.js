@@ -49,7 +49,7 @@ EntryService.prototype.createEntry = async function (entry) {
     });
 
   if (success === true) {
-    return { id: rowKeyName };
+    return this.getEntryData(rowKeyName);
   }
 };
 

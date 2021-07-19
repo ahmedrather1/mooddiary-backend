@@ -26,8 +26,8 @@ module.exports.addEntry = async function (context, req) {
   }
 
   try {
-    const entryID = await es.createEntry(newEntry);
-    context.res.send(JSON.stringify(entryID));
+    const entry = await es.createEntry(newEntry);
+    context.res.send(JSON.stringify(entry));
   } catch (e) {
     context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
   }
