@@ -133,8 +133,8 @@ module.exports.updateEntry = async function (context, req) {
   }
 
   try {
-    await es.updateEntryData(toUpdate, req.params.id);
-    context.res.send();
+    const entry = await es.updateEntryData(toUpdate, req.params.id);
+    context.res.send(JSON.stringify(entry));
   } catch (e) {
     context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
     return;

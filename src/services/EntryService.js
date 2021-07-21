@@ -50,6 +50,8 @@ EntryService.prototype.createEntry = async function (entry) {
 
   if (success === true) {
     return this.getEntryData(rowKeyName);
+  } else {
+    return null;
   }
 };
 
@@ -176,9 +178,11 @@ EntryService.prototype.updateEntryData = async function (toUpdate, id) {
     });
   };
 
+  let success = false;
+
   await updateEntryPromise("DiaryEntries", updatedEntry)
     .then((result) => {
-      // nothing, success
+      success = true;
     })
     .catch((err) => {
       if (err.code === "ResourceNotFound") {
@@ -193,6 +197,12 @@ EntryService.prototype.updateEntryData = async function (toUpdate, id) {
         );
       }
     });
+
+  if (success === true) {
+    return this.getEntryData(id);
+  } else {
+    return null;
+  }
 };
 
 EntryService.prototype.deleteEntry = async function (id) {
