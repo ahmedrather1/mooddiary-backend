@@ -109,6 +109,16 @@ functions:
         authlevel: anonymous
         cors: true
 
+  getEntryDate:
+    handler: src/handlers/EntryHandler.getEntryDate
+    events:
+      - http: true
+        route: entries/date/{date}
+        methods:
+          - GET
+        authlevel: anonymous
+        cors: true
+
   updateEntry:
     handler: src/handlers/EntryHandler.updateEntry
     events:
