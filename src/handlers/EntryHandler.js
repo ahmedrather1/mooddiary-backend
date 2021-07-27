@@ -40,8 +40,8 @@ module.exports.getEntries = async function (context, req) {
     "Content-Type": "application/json",
   };
 
-  console.log(req);
-  console.log(context.res);
+  //console.log(req);
+  //console.log(context.res);
   /*
   if (req.method === "OPTIONS") {
     context.res.status(200).send({});
@@ -110,6 +110,9 @@ module.exports.updateEntry = async function (context, req) {
     "Access-Control-Allow-Credentials": true,
     "Content-Type": "application/json",
   };
+
+  console.log(req);
+
   const es = new EntryService();
   const evs = new EntryValidationService();
 
@@ -117,7 +120,7 @@ module.exports.updateEntry = async function (context, req) {
 
   // more of these checks required to build toUpdate object for prompts and freewrite
   //
-  if (req.body.mood) {
+  if (req.body.mood || req.body.mood === 0) {
     toUpdate.mood = req.body.mood;
   }
 
