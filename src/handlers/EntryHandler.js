@@ -104,25 +104,6 @@ module.exports.getEntry = async function (context, req) {
   }
 };
 
-module.exports.getEntryDate = async function (context, req) {
-  context.res.headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Credentials": true,
-    "Content-Type": "application/json",
-  };
-
-  const es = new EntryService();
-
-  try {
-    let today = new Date(req.params.date);
-    const entry = await es.getEntryDate(today);
-    context.res.send(JSON.stringify(entry));
-  } catch (e) {
-    context.res.status(e.errorCode).send(JSON.stringify(e.errorList));
-    return;
-  }
-};
-
 module.exports.updateEntry = async function (context, req) {
   context.res.headers = {
     "Access-Control-Allow-Origin": "*",

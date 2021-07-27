@@ -147,57 +147,6 @@ EntryService.prototype.getEntryData = async function (id) {
   return cleanEntries(entryList)[0];
 };
 
-EntryService.prototype.getEntryDate = async function (date) {
-  const tableService = azure.createTableService(
-    process.env.TABLE_STORAGE_ACCOUNT,
-    process.env.TABLE_STORAGE_ACCESS_KEY,
-    process.env.TABLE_STORAGE_HOST_ADDR
-  );
-
-  let yesterday = new Date(date);
-  yesterday.setDate(date.getDate() - 1);
-
-  let tomorrow = new Date(date);
-  tomorrow.setDate(date.getDate() + 1);
-
-  const query = new azure.TableQuery().where(
-    "date <= ? and date >= ?",
-    tomorrow,
-    yesterday
-  );
-
-  const getEntryDatePromise = (...args) => {
-    return new Promise((resolve, reject) => {
-      tableService.queryEntities(...args, (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
-      });
-    });
-  };
-  let entry;
-
-  await getEntryDatePromise("DiaryEntries", query, null)
-    .then((result) => {
-      if (result.entries.length === 1) {
-        entry = result.entries[0];
-      } else {
-        entry = null;
-      }
-    })
-    .catch((err) => {
-      throw new DiaryErrorObject(
-        500,
-        new DiaryErrorItem("table", "server error", err)
-      );
-    });
-
-  if (entry === null) {
-    return null;
-  } else {
-    return this.getEntryData(entry.RowKey._);
-  }
-};
-
 EntryService.prototype.updateEntryData = async function (toUpdate, id) {
   const tableService = azure.createTableService(
     process.env.TABLE_STORAGE_ACCOUNT,
