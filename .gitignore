@@ -102,3 +102,19 @@ dist
 
 # TernJS port file
 .tern-port
+
+# mac stuff
+.DS_Store
+
+# functions
+addEntry/
+getEntries/
+getEntry/
+updateEntry/
+
+# local settings
+local.settings.json
+
+# other
+temp/
+function.json
