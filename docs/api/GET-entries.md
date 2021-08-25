@@ -10,6 +10,10 @@ limit=1
 
 Any number, including none, of these query parameters can be used.
 
+If createdFrom is not provided, the default createdFrom value is Jan 1, 2020
+If createdTo is not provided, the default createdTo value is one day after the call is made
+If limit is not provided, the default limit value is the DEFAULT_GETENTRIES_LIMIT in the local.settings file.
+
 #### Response:
 
 200 -- everything ok
