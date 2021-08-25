@@ -54,7 +54,7 @@ module.exports.getEntries = async function (context, req) {
   if (req.query.createdFrom && !isNaN(Date.parse(req.query.createdFrom))) {
     fromDate = req.query.createdFrom;
   } else {
-    fromDate.setDate(fromDate.getDate() - 7);
+    fromDate.setFullYear(2020, 0, 1);
   }
 
   let toDate = new Date();
