@@ -1,6 +1,14 @@
 ## GET: /entries
 
-#### Request: n/a
+#### Request:
+
+query parameters:
+
+createdFrom=2021-07-27T00:00:00Z
+createdTo=2021-07-27T23:59:59Z
+limit=1
+
+Any number, including none, of these query parameters can be used.
 
 #### Response:
 
