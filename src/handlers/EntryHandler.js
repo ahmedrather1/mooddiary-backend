@@ -50,6 +50,8 @@ module.exports.getEntries = async function (context, req) {
 
   const es = new EntryService();
 
+  console.log("headers: " + JSON.stringify(req.headers));
+
   let fromDate = new Date();
   if (req.query.createdFrom && !isNaN(Date.parse(req.query.createdFrom))) {
     fromDate = req.query.createdFrom;
